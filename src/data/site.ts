@@ -16,7 +16,7 @@ export const site = {
   /** Leave href empty to hide a link. */
   socials: [
     { label: 'Instagram', href: '' },
-    { label: 'LinkedIn', href: '' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/karen-iredy-56553997' },
   ],
 
   /** Contact form endpoint, read from the VITE_FORM_ENDPOINT env variable (see README). */
