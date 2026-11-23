@@ -1,0 +1,161 @@
+.offers {
+  background: var(--warm-white);
+  padding-block: var(--section-y);
+}
+
+.offers__head {
+  display: grid;
+  grid-template-columns: 7fr 1fr 4fr;
+  align-items: end;
+  margin-block: var(--s-6);
+}
+.offers__title {
+  font-size: var(--t-display);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+}
+.offers__title .serif {
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: -0.035em;
+  padding-left: 8vw;
+}
+.offers__note {
+  grid-column: 3;
+  color: var(--muted);
+}
+
+/* ── Doors ── */
+.doors {
+  display: flex;
+  height: clamp(520px, 70vh, 720px);
+  border-left: 1px solid var(--ink);
+}
+.door {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  border-right: 1px solid var(--ink);
+  transition: flex-grow 0.9s var(--ease-out), background 0.6s var(--ease-out);
+}
+.door.is-open {
+  flex-grow: 5;
+  background: var(--ink);
+  color: var(--ivory);
+}
+.door__face {
+  flex: 0 0 auto;
+  width: clamp(64px, 6vw, 96px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+  text-align: left;
+}
+.door__num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2rem;
+  line-height: 1;
+}
+.door__name {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: clamp(1.4rem, 2vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.door.is-open .door__name {
+  background: var(--foil);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.door:not(.is-open):hover {
+  background: var(--mineral);
+}
+
+.door__room {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-5) var(--s-5) var(--s-3);
+  animation: room-in 0.9s var(--ease-out) both;
+}
+.door__room[hidden] {
+  display: none;
+}
+@keyframes room-in {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+.door__for {
+  font-style: italic;
+  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+}
+.door__line {
+  max-width: 40ch;
+  color: var(--silver);
+}
+.door__room .btn {
+  align-self: flex-start;
+}
+.door.is-open .btn--ink {
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+@media (max-width: 960px) {
+  .offers__head {
+    grid-template-columns: 1fr;
+    gap: var(--s-4);
+  }
+  .offers__note {
+    grid-column: 1;
+  }
+  .offers__title .serif {
+    padding-left: 0;
+  }
+  .doors {
+    flex-direction: column;
+    height: auto;
+    border-left: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .door {
+    flex-direction: column;
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+  .door__face {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1.1rem 0.75rem;
+  }
+  .door__name {
+    writing-mode: horizontal-tb;
+    transform: none;
+    white-space: normal;
+    font-size: 1.5rem;
+  }
+  .door__room {
+    padding: 0 0.75rem 1.5rem;
+  }
+}

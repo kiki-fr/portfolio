@@ -1,0 +1,27 @@
+.frags {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+}
+.frags__strip {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+/* every strip shows its own slice of the same full-size image */
+.frags__inner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--n) * 100%);
+  left: calc(var(--i) * -100%);
+}
+.frags__strip:nth-child(3n + 2) .frags__inner {
+  filter: brightness(1.08) contrast(1.05);
+}
+.frags__strip:nth-child(4n + 3) .frags__inner {
+  filter: grayscale(1) contrast(1.15);
+}

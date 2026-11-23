@@ -1,0 +1,46 @@
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 120;
+  transform-origin: 0 50%;
+}
+
+.rail {
+  position: fixed;
+  top: 50%;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  writing-mode: vertical-rl;
+}
+.rail--left {
+  left: 12px;
+  transform: translateY(-50%) rotate(180deg);
+  opacity: 0.6;
+}
+.rail--right {
+  right: 12px;
+  transform: translateY(-50%);
+}
+.rail__line {
+  width: 1px;
+  height: 40px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+@media (max-width: 1100px) {
+  .rail {
+    display: none;
+  }
+}

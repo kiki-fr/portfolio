@@ -1,0 +1,132 @@
+.about {
+  background: var(--ivory);
+  padding-block: var(--section-y);
+  overflow: hidden;
+}
+
+.about__name {
+  margin-block: var(--s-5);
+  font-size: clamp(4rem, 13vw, 14rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+}
+.about__name .serif {
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;
+  -webkit-text-stroke: 0;
+  color: var(--ink);
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 5fr 1fr 6fr;
+  gap: var(--gutter);
+  align-items: start;
+}
+.about__portrait {
+  position: sticky;
+  top: calc(var(--header-h) + 32px);
+}
+.about__portrait-inner {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  color: var(--ink);
+}
+.about__caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.2rem;
+  opacity: 0.55;
+}
+.about__tag {
+  position: absolute;
+  right: -2.5rem;
+  top: 12%;
+  transform: rotate(5deg);
+}
+.about__pull {
+  font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+  font-style: italic;
+  line-height: 1.05;
+  padding-left: 2.5rem;
+  border-left: 1px solid var(--ink);
+  margin-block: var(--s-3);
+}
+.about__text {
+  grid-column: 3;
+  display: grid;
+  gap: var(--s-5);
+}
+.about__lead {
+  font-size: var(--t-h2);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+.about__lead em {
+  font-style: italic;
+}
+/* "become." sits on a strip of foil, like a highlighter on a proof */
+.about__lead .foil-text {
+  color: var(--ink);
+  background: var(--foil);
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  padding: 0 0.12em;
+  box-decoration-break: clone;
+}
+.about__body {
+  display: grid;
+  gap: var(--s-3);
+  font-size: 1.12rem;
+  max-width: 56ch;
+}
+.about__body p:first-child::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 4.4em;
+  line-height: 0.8;
+  padding: 0.05em 0.1em 0 0;
+}
+
+.about__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.about__tags li {
+  padding: 0.5rem 0.9rem;
+  box-shadow: inset 0 0 0 1px var(--ink);
+  font-size: 0.95rem;
+}
+.about__tags li.serif {
+  font-style: italic;
+  font-size: 1.15rem;
+  padding-block: 0.35rem;
+}
+.about__tags li:nth-child(4n) {
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+@media (max-width: 900px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+  .about__portrait {
+    position: relative;
+    top: 0;
+    width: 80%;
+  }
+  .about__tag {
+    right: -1.5rem;
+  }
+  .about__text {
+    grid-column: 1;
+  }
+}

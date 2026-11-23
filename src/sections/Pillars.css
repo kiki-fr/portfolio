@@ -1,0 +1,229 @@
+.pillars {
+  background: var(--warm-white);
+}
+
+.pillars__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: var(--s-4);
+}
+.pillars__formula {
+  font-size: var(--t-small);
+  text-align: right;
+}
+.pillars__formula span {
+  font-family: var(--font-serif);
+  font-size: 1.4em;
+  margin-inline: 0.3em;
+}
+
+.pillar {
+  position: relative;
+  overflow: hidden;
+}
+.pillar__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+}
+.pillar__copy {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+  justify-items: start;
+}
+.pillar__line {
+  font-size: var(--t-lead);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.pillar__list {
+  display: grid;
+  width: 100%;
+}
+.pillar__list li {
+  padding-block: 0.7rem;
+  border-top: 1px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.pillar__index {
+  opacity: 0.6;
+}
+.pillar__verb {
+  margin: 0;
+  line-height: 0.78;
+  pointer-events: none;
+}
+
+/* ── THINK ── */
+.pillar--think {
+  background: var(--ink);
+  color: var(--ivory);
+  padding-top: var(--s-7);
+}
+.pillar__bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+.pillar--think .pillar__grid > .pillar__index {
+  grid-column: 1 / 3;
+}
+.pillar--think .pillar__copy {
+  grid-column: 8 / 13;
+}
+.pillar--think .pillar__list li {
+  border-color: rgba(244, 241, 234, 0.25);
+}
+.pillar__verb--think {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--s-5);
+  margin-bottom: -0.11em;
+  font-size: clamp(6rem, 33vw, 38rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  transform: translateX(-0.05em);
+}
+
+/* ── DIRECT ── */
+.pillar--direct {
+  background: var(--ivory);
+  padding-block: var(--section-y);
+}
+.pillar__grid--direct {
+  align-items: center;
+}
+.pillar__collage {
+  position: relative;
+  grid-column: 1 / 8;
+  min-height: clamp(420px, 52vw, 760px);
+}
+.pillar__img {
+  position: absolute;
+}
+.pillar__img--a {
+  left: 6%;
+  top: 0;
+  width: 56%;
+  height: 92%;
+}
+.pillar__fig {
+  position: absolute;
+  left: calc(100% + 1rem);
+  top: 0;
+  writing-mode: vertical-rl;
+  opacity: 0.6;
+}
+.pillar__img--b {
+  right: 0;
+  top: 38%;
+  width: 26%;
+  aspect-ratio: 3 / 4;
+  z-index: 2;
+}
+.pillar__verb--direct {
+  position: absolute;
+  left: -2%;
+  bottom: -2%;
+  z-index: 3;
+  font-size: clamp(5rem, 15vw, 16rem);
+  font-style: italic;
+  letter-spacing: -0.04em;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+.pillar--direct .pillar__copy {
+  grid-column: 9 / 13;
+}
+
+/* ── CREATE ── */
+.pillar--create {
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 40%, rgba(255, 255, 255, 0.9), transparent 60%),
+    linear-gradient(160deg, #dfe1e6, #b8bcc5 50%, #e8e9ed);
+  padding-top: var(--section-y);
+}
+.pillar__grid--create {
+  align-items: center;
+}
+.pillar--create .pillar__copy {
+  grid-column: 1 / 6;
+}
+/* An arched window — gallery architecture rather than a UI circle. */
+.pillar__arch {
+  position: relative;
+  grid-column: 8 / 12;
+  aspect-ratio: 3 / 4.4;
+}
+.pillar__arch > .art {
+  border-radius: 999px 999px 0 0;
+  outline: 1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 10px;
+}
+.pillar__arch-tag {
+  position: absolute;
+  left: -14%;
+  bottom: 14%;
+  transform: rotate(-6deg);
+}
+.pillar__verb--create {
+  position: relative;
+  margin-top: var(--s-5);
+  margin-bottom: -0.1em;
+  font-size: clamp(6rem, 30vw, 34rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+  text-align: right;
+  color: transparent;
+  background: var(--holo);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: holo-shift 10s linear infinite;
+}
+
+@media (max-width: 900px) {
+  .pillars__head {
+    flex-direction: column;
+  }
+  .pillars__formula {
+    text-align: left;
+  }
+  .pillar--think .pillar__copy,
+  .pillar--direct .pillar__copy,
+  .pillar--create .pillar__copy,
+  .pillar__collage,
+  .pillar__arch {
+    grid-column: 1 / -1;
+  }
+  .pillar__fig {
+    display: none;
+  }
+  .pillar--think .pillar__grid > .pillar__index {
+    display: none;
+  }
+  .pillar__collage {
+    min-height: 110vw;
+    margin-bottom: var(--s-5);
+  }
+  .pillar__arch {
+    width: 70%;
+    justify-self: center;
+    margin-top: var(--s-6);
+  }
+  .pillar__arch-tag {
+    left: -18%;
+  }
+}

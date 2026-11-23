@@ -1,0 +1,316 @@
+.art {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--mineral);
+  width: 100%;
+  height: 100%;
+}
+
+.art img,
+.art__svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* grain on every placeholder */
+.art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.art--image::after {
+  opacity: 0.12;
+}
+
+.art__label {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.65rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  mix-blend-mode: difference;
+  filter: invert(1);
+  opacity: 0.75;
+}
+.art__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+/* ── holo: pearlescent foil, crumpled, shifting with the pointer ── */
+.art--holo {
+  background: #e9e7ee;
+}
+.art__holo {
+  position: absolute;
+  inset: 0;
+  background:
+    /* crumpled foil facets */
+    linear-gradient(calc(30deg + var(--px) * 40deg), transparent 30%, rgba(255, 255, 255, 0.75) 38%, transparent 46%),
+    linear-gradient(calc(150deg - var(--py) * 50deg), transparent 45%, rgba(90, 80, 120, 0.25) 52%, transparent 60%),
+    linear-gradient(calc(80deg + var(--py) * 30deg), transparent 62%, rgba(255, 255, 255, 0.6) 66%, transparent 72%),
+    var(--foil);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 160% 160%;
+  background-position: 0 0, 0 0, 0 0, calc(var(--px) * 60%) calc(var(--py) * 60%);
+}
+.art__holo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    conic-gradient(from 20deg at 30% 70%, rgba(255, 255, 255, 0.4), transparent 25%, rgba(0, 0, 0, 0.08) 50%, transparent 75%, rgba(255, 255, 255, 0.4)),
+    conic-gradient(from 200deg at 75% 25%, rgba(0, 0, 0, 0.1), transparent 30%, rgba(255, 255, 255, 0.5) 55%, transparent 80%);
+  mix-blend-mode: soft-light;
+}
+
+/* ── Treatments (apply to placeholders and real images alike) ── */
+.art__fx {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.art--t-scan .art__fx {
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+}
+.art--t-scan img,
+.art--t-scan > div,
+.art--t-scan > svg {
+  filter: contrast(1.1) saturate(0.85);
+}
+.art--t-halftone .art__fx {
+  background: radial-gradient(circle, rgba(11, 11, 12, 0.55) 0.9px, transparent 1.4px) 0 0 / 5px 5px;
+  mix-blend-mode: multiply;
+  opacity: 0.65;
+}
+.art--t-foil .art__fx {
+  background: var(--foil);
+  background-size: 180% 180%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  mix-blend-mode: color-dodge;
+  opacity: 0.55;
+}
+.art--t-duotone img,
+.art--t-duotone > div,
+.art--t-duotone > svg {
+  filter: grayscale(1) contrast(1.15);
+}
+.art--t-duotone .art__fx {
+  background: linear-gradient(160deg, var(--holo-violet), var(--holo-pink));
+  mix-blend-mode: screen;
+  opacity: 0.45;
+}
+
+/* ── shatter: cracked glass + glitch slices ── */
+.art__shatter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.art__shatter svg {
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+}
+/* real photos already carry their own glass: keep only a faint extra fracture */
+.art--image .art__shatter svg {
+  opacity: 0.35;
+}
+.art__glitchbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: inherit;
+  backdrop-filter: hue-rotate(90deg) saturate(2.2) brightness(1.15);
+  -webkit-backdrop-filter: hue-rotate(90deg) saturate(2.2) brightness(1.15);
+  mix-blend-mode: normal;
+  opacity: 0;
+  animation: glitchbar 5s steps(1) infinite;
+}
+.art__glitchbar--1 { top: 18%; height: 4%; animation-delay: -1s; }
+.art__glitchbar--2 { top: 52%; height: 2.5%; animation-delay: -2.6s; }
+.art__glitchbar--3 { top: 71%; height: 6%; animation-delay: -3.9s; }
+@keyframes glitchbar {
+  0%, 86%, 100% { opacity: 0; transform: none; }
+  87% { opacity: 1; transform: translateX(-4%); }
+  89% { opacity: 1; transform: translateX(6%); }
+  91% { opacity: 0.8; transform: translateX(-2%); }
+}
+
+/* ── portrait: editorial chrome profile with a foil band ── */
+.art__portrait {
+  position: absolute;
+  inset: 0;
+}
+.art__portrait-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 30%;
+  height: 9%;
+  background: var(--foil);
+  background-size: 200% 100%;
+  background-position: calc(var(--px) * 100%) 0;
+  mix-blend-mode: hard-light;
+}
+
+/* ── shard: fragmented mirror ── */
+.art--shard {
+  background: linear-gradient(170deg, #4b4e55, #1a1b1f 60%, #2f3137);
+}
+.art__shards {
+  position: absolute;
+  inset: 0;
+}
+.art__shard {
+  position: absolute;
+  inset: 0;
+  background: var(--chrome);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.3);
+}
+.art__shard--1 { clip-path: polygon(12% 0, 40% 0, 30% 62%); }
+.art__shard--2 { clip-path: polygon(44% 4%, 70% 0, 58% 48%, 46% 70%); background: var(--holo); opacity: 0.85; }
+.art__shard--3 { clip-path: polygon(72% 8%, 92% 18%, 80% 90%); }
+.art__shard--4 { clip-path: polygon(20% 58%, 52% 40%, 46% 100%, 14% 100%); filter: brightness(0.75); }
+.art__shard--5 { clip-path: polygon(55% 55%, 82% 40%, 90% 100%, 50% 100%); filter: brightness(1.1); }
+.art__shard--6 { clip-path: polygon(0 20%, 14% 30%, 6% 80%, 0 70%); filter: brightness(0.6); }
+.art__shard--7 { clip-path: polygon(36% 30%, 56% 26%, 50% 52%); background: #fff; opacity: 0.7; }
+
+/* ── mono: B&W editorial glyph ── */
+.art--mono {
+  background: linear-gradient(180deg, #e9e7e2, #9c9a95);
+}
+.art__mono {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.7), transparent 50%),
+    linear-gradient(160deg, #d8d6d1 0%, #6f6d69 60%, #1b1b1e 100%);
+  filter: grayscale(1) contrast(1.2);
+}
+.art__glyph {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: min(140cqw, 34rem);
+  line-height: 0.7;
+  color: var(--ink);
+  transform: translate(18%, 12%);
+  mix-blend-mode: multiply;
+}
+.art {
+  container-type: inline-size;
+}
+
+/* ── eye: optical form ── */
+.art--eye {
+  background: var(--warm-white);
+}
+.art__eye {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.art__eye::before {
+  content: '';
+  width: 130%;
+  aspect-ratio: 2.2;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #fff 0 40%, var(--mineral) 60%, transparent 71%);
+  box-shadow: 0 0 0 1px rgba(11, 11, 12, 0.25);
+}
+.art__iris {
+  position: absolute;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--ink) 0 24%, transparent 25%),
+    repeating-conic-gradient(from 0deg, rgba(0, 0, 0, 0.15) 0 3deg, transparent 3deg 9deg),
+    conic-gradient(var(--holo-blue), var(--holo-violet), var(--holo-pink), var(--holo-mint), var(--holo-blue));
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.4),
+    0 0 0 6px rgba(255, 255, 255, 0.6);
+  animation: iris 7s var(--ease-in-out) infinite alternate;
+}
+.art__iris::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 22%;
+  width: 22%;
+  height: 14%;
+  border-radius: 50%;
+  background: #fff;
+  filter: blur(1px);
+}
+@keyframes iris {
+  to {
+    transform: translateX(18%) scale(0.92);
+  }
+}
+
+/* ── tiles: holographic mosaic ── */
+.art--tiles {
+  background: var(--warm-white);
+}
+.art__tiles {
+  position: absolute;
+  inset: 8%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6%;
+  align-content: center;
+}
+.art__tiles span {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--holo);
+  background-size: 600% 600%;
+  background-position: calc(var(--i) * 17%) calc(var(--i) * 11%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  animation: tile 6s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.2s);
+}
+@keyframes tile {
+  to {
+    background-position: calc(var(--i) * 17% + 60%) calc(var(--i) * 11% + 40%);
+    opacity: 0.75;
+  }
+}
+
+/* ── ink: near-black with a silver line ── */
+.art--ink {
+  background: var(--ink);
+}
+.art__ink {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, transparent 49.6%, var(--silver) 49.8%, #fff 50%, var(--silver) 50.2%, transparent 50.4%),
+    radial-gradient(ellipse at 70% 80%, #2a2b30, transparent 60%),
+    var(--ink);
+}
+
+.art--portrait {
+  background: var(--ink);
+}

@@ -1,0 +1,167 @@
+.lab {
+  position: relative;
+  padding-bottom: var(--section-y);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--mineral);
+  overflow: hidden;
+}
+.lab__marquee {
+  background: var(--holo);
+  border-color: var(--ink);
+  margin-bottom: var(--s-6);
+}
+
+.lab__head {
+  display: grid;
+  grid-template-columns: 7fr 4fr;
+  gap: var(--gutter);
+  align-items: end;
+  margin-top: var(--s-5);
+}
+.lab__title {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.2em;
+  font-size: var(--t-mega);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+.lab__title-lab {
+  font-weight: 400;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: -0.03em;
+  transform: rotate(-6deg) translateY(0.08em);
+  background: var(--holo);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: holo-shift 6s linear infinite;
+}
+.lab__stamp {
+  position: absolute;
+  right: 4%;
+  top: -1.2rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ivory);
+  transform: rotate(5deg);
+}
+.lab__note {
+  color: var(--ink-soft);
+}
+.lab__note em {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.lab__table {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: clamp(70px, 7vw, 120px);
+  grid-auto-flow: dense;
+  gap: clamp(12px, 2vw, 28px);
+  margin-top: var(--s-6);
+  min-height: 60vh;
+}
+.lab__item {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.7rem;
+  background: var(--warm-white);
+  box-shadow: 0 20px 50px -25px rgba(11, 11, 12, 0.5);
+  touch-action: pan-y;
+}
+.lab__item .art {
+  min-height: 0;
+}
+.lab__item figcaption {
+  display: grid;
+  gap: 0.1rem;
+}
+.lab__item figcaption .mono {
+  font-size: 0.58rem;
+  opacity: 0.6;
+}
+.lab__item-title {
+  font-size: 1.2rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+.lab__item--s {
+  grid-column: span 3;
+  grid-row: span 3;
+}
+.lab__item--m {
+  grid-column: span 4;
+  grid-row: span 4;
+}
+.lab__item--l {
+  grid-column: span 5;
+  grid-row: span 5;
+}
+.lab__item--w {
+  grid-column: span 6;
+  grid-row: span 3;
+}
+.lab__item:nth-child(3n) {
+  margin-top: 8%;
+}
+.lab__item:nth-child(4n + 1) {
+  margin-left: -4%;
+}
+
+.lab__scribble {
+  position: absolute;
+  right: 3%;
+  bottom: -2%;
+  font-size: clamp(3rem, 8vw, 8rem);
+  font-style: italic;
+  transform: rotate(-8deg);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .lab__head {
+    grid-template-columns: 1fr;
+  }
+  .lab__stamp {
+    position: static;
+    margin-top: 1rem;
+    font-size: 0.6rem;
+  }
+  .lab__table {
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 22vw;
+  }
+  .lab__item--s {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+  .lab__item--m,
+  .lab__item--l {
+    grid-column: span 6;
+    grid-row: span 4;
+  }
+  .lab__item--w {
+    grid-column: span 6;
+    grid-row: span 3;
+  }
+  .lab__item:nth-child(4n + 1) {
+    margin-left: 0;
+  }
+}
