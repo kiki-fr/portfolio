@@ -1,0 +1,132 @@
+.journal {
+  background: var(--warm-white);
+  padding-block: var(--section-y);
+}
+
+.journal__head {
+  display: grid;
+  grid-template-columns: 7fr 1fr 4fr;
+  align-items: end;
+  margin-block: var(--s-6);
+}
+.journal__title {
+  font-size: var(--t-mega);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+.journal__kicker {
+  margin-top: 0.1em;
+  padding-left: 0.08em;
+  font-size: clamp(2.2rem, 6vw, 6.5rem);
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.journal__note {
+  grid-column: 3;
+  color: var(--muted);
+}
+
+.journal__grid {
+  display: grid;
+  grid-template-columns: 6fr 1fr 5fr;
+  gap: var(--gutter);
+  align-items: start;
+}
+
+/* Featured */
+.journal__lead {
+  display: grid;
+  gap: var(--s-4);
+}
+.journal__lead-img {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  color: var(--ink);
+}
+.journal__status {
+  position: absolute;
+  right: -1rem;
+  top: 1.5rem;
+  transform: rotate(4deg);
+  z-index: 2;
+}
+.journal__meta {
+  opacity: 0.6;
+  margin-bottom: 0.6rem;
+}
+.journal__meta i {
+  font-style: normal;
+  color: #7a5cff;
+}
+.journal__lead-title {
+  font-size: clamp(2.2rem, 4.4vw, 4.6rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+.journal__excerpt {
+  margin-top: var(--s-3);
+  font-size: clamp(1.3rem, 1.9vw, 1.8rem);
+  font-style: italic;
+  line-height: 1.15;
+  max-width: 34ch;
+}
+
+/* Index */
+.journal__list {
+  grid-column: 3;
+  border-top: 1px solid var(--ink);
+}
+.journal__item {
+  display: grid;
+  grid-template-columns: 2.6rem 88px 1fr;
+  gap: 1.1rem;
+  align-items: start;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--ink);
+  transition: background var(--dur) var(--ease-out);
+}
+.journal__item:hover {
+  background: var(--ivory);
+}
+.journal__num {
+  font-size: 1.8rem;
+  font-style: italic;
+  line-height: 1;
+}
+.journal__thumb {
+  aspect-ratio: 4 / 5;
+}
+.journal__item-title {
+  font-size: clamp(1.3rem, 1.8vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.journal__item-excerpt {
+  margin-top: 0.45rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 900px) {
+  .journal__head,
+  .journal__grid {
+    grid-template-columns: 1fr;
+    gap: var(--s-4);
+  }
+  .journal__note,
+  .journal__list {
+    grid-column: 1;
+  }
+  .journal__list {
+    margin-top: var(--s-5);
+  }
+  .journal__status {
+    right: -0.5rem;
+  }
+}

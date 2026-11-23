@@ -1,35 +1,37 @@
 import { ArrowUp } from 'lucide-react'
 import { nav, site } from '../data/site'
+import { useT } from '../i18n'
 import './Footer.css'
 
 export function Footer() {
+  const t = useT()
   const socials = site.socials.filter((s) => s.href)
   return (
     <footer className="footer">
       <div className="wrap footer__grid">
         <div>
-          <p className="mono footer__k">Index</p>
+          <p className="mono footer__k">{t.footer.index}</p>
           <ul>
             {nav.map((n) => (
               <li key={n.id}>
-                <a href={`#${n.id}`}>{n.label}</a>
+                <a href={`#${n.id}`}>{t.nav[n.key]}</a>
               </li>
             ))}
             <li>
-              <a href="#contact">Contact</a>
+              <a href="#contact">{t.nav.contact}</a>
             </li>
           </ul>
         </div>
         <div>
-          <p className="mono footer__k">Practice</p>
+          <p className="mono footer__k">{t.footer.practice}</p>
           <ul>
-            <li>Brand intelligence</li>
-            <li>Creative direction</li>
-            <li>AI-assisted creation</li>
+            {t.footer.practiceItems.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
           </ul>
         </div>
         <div>
-          <p className="mono footer__k">Elsewhere</p>
+          <p className="mono footer__k">{t.footer.elsewhere}</p>
           <ul>
             {site.email && (
               <li>
@@ -43,12 +45,12 @@ export function Footer() {
                 </a>
               </li>
             ))}
-            {!site.email && socials.length === 0 && <li className="footer__muted">Links coming soon</li>}
+            {!site.email && socials.length === 0 && <li className="footer__muted">{t.footer.soon}</li>}
           </ul>
         </div>
         <div className="footer__top">
           <a href="#index" className="btn btn--line">
-            Back to index <ArrowUp aria-hidden="true" />
+            {t.footer.back} <ArrowUp aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -58,9 +60,11 @@ export function Footer() {
       </p>
 
       <div className="wrap footer__legal mono">
-        <span>© {new Date().getFullYear()} {site.name}</span>
-        <span>{site.positioning}</span>
-        <span>{site.location}</span>
+        <span>
+          © {new Date().getFullYear()} {site.name}
+        </span>
+        <span>{t.common.positioning}</span>
+        <span>{t.common.location}</span>
       </div>
     </footer>
   )

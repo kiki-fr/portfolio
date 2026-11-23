@@ -4,7 +4,8 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { ArtSlot } from '../components/ArtSlot'
 import { Folio } from '../components/Folio'
 import { MaskLines, Reveal } from '../components/Reveal'
-import { studioGallery, studioServices } from '../data/services'
+import { studioGallery } from '../data/services'
+import { useT } from '../i18n'
 import { useDesktop, useReducedMotionPref } from '../hooks/useMediaQuery'
 import { useSheet } from '../hooks/useSheet'
 import { prefillContact } from '../lib/events'
@@ -13,13 +14,14 @@ import './Studio.css'
 const treatments = ['scan', 'foil', 'none', 'duotone', 'scan', 'none', 'foil'] as const
 
 function Gallery() {
+  const t = useT()
   return (
     <>
       {studioGallery.map((g, i) => (
-        <figure key={i} className={`studio__item studio__item--${g.ratio}`} data-cursor="Study">
+        <figure key={i} className={`studio__item studio__item--${g.ratio}`} data-cursor={t.cursor.study}>
           <ArtSlot art={g} label={false} treatment={treatments[i % treatments.length]} />
           <figcaption className="mono">
-            <span>{String(i + 1).padStart(2, '0')}</span> {g.caption}
+            <span>{String(i + 1).padStart(2, '0')}</span> {t.studio.captions[i]}
           </figcaption>
         </figure>
       ))}
@@ -32,6 +34,7 @@ function Gallery() {
  * Mobile / reduced motion: a native horizontal scroll-snap strip.
  */
 function HorizontalGallery() {
+  const t = useT()
   const outer = useRef<HTMLDivElement>(null)
   const track = useRef<HTMLDivElement>(null)
   const [distance, setDistance] = useState(0)
@@ -59,12 +62,12 @@ function HorizontalGallery() {
     <div ref={outer} className="studio__h" style={{ height: `calc(100vh + ${distance}px)` }}>
       <div className="studio__sticky">
         <motion.p className="studio__bgword" style={{ x: bgX }} aria-hidden="true">
-          Studio <span className="serif">studio</span> Studio
+          {t.studio.bgWord} <span className="serif">{t.studio.bgWord}</span> {t.studio.bgWord}
         </motion.p>
         <motion.div ref={track} className="studio__track" style={{ x }}>
           <div className="studio__intro-card">
-            <p className="serif">Technology is not the idea.</p>
-            <p className="holo-text serif">Technology expands the idea.</p>
+            <p className="serif">{t.studio.cardA}</p>
+            <p className="holo-text serif">{t.studio.cardB}</p>
           </div>
           <Gallery />
         </motion.div>
@@ -74,6 +77,7 @@ function HorizontalGallery() {
 }
 
 export function Studio() {
+  const t = useT()
   const desktop = useDesktop()
   const reduced = useReducedMotionPref()
   const ref = useRef<HTMLElement>(null)
@@ -82,22 +86,17 @@ export function Studio() {
   return (
     <motion.section ref={ref} style={{ clipPath }} id="studio" className="studio" aria-labelledby="studio-title">
       <div className="wrap">
-        <Folio num="04" label="AI Creative Studio" aside="Visual production" />
+        <Folio id="studio" aside={t.studio.aside} />
         <div className="studio__head">
           <h2 id="studio-title" className="studio__title">
             <MaskLines
               lineClassName="studio__line"
-              lines={['Imagination,', <span className="serif">without the</span>, 'old limits.']}
+              lines={[t.studio.title[0], <span className="serif">{t.studio.title[1]}</span>, t.studio.title[2]]}
             />
           </h2>
           <Reveal className="studio__lede" delay={0.15}>
-            <p>
-              A creative studio using emerging tools to expand what can be imagined — and produced. Campaign visuals,
-              product imagery and whole visual worlds, art-directed with the same rigour as a photoshoot.
-            </p>
-            <p className="studio__note">
-              AI is an instrument here, never the point. The point is still the idea, the taste and the decisions.
-            </p>
+            <p>{t.studio.lede}</p>
+            <p className="studio__note">{t.studio.note}</p>
           </Reveal>
         </div>
       </div>
@@ -105,27 +104,27 @@ export function Studio() {
       {desktop && !reduced ? (
         <HorizontalGallery />
       ) : (
-        <div className="studio__strip" tabIndex={0} aria-label="Studio gallery, scroll horizontally">
+        <div className="studio__strip" tabIndex={0} aria-label={t.studio.stripLabel}>
           <div className="studio__intro-card">
-            <p className="serif">Technology is not the idea.</p>
-            <p className="holo-text serif">Technology expands the idea.</p>
+            <p className="serif">{t.studio.cardA}</p>
+            <p className="holo-text serif">{t.studio.cardB}</p>
           </div>
           <Gallery />
         </div>
       )}
 
       <div className="wrap studio__services">
-        <p className="mono">Studio services</p>
+        <p className="mono">{t.studio.servicesLabel}</p>
         <ul>
-          {studioServices.map((s, i) => (
+          {t.studio.services.map((s, i) => (
             <li key={s}>
               <span className="mono">{String(i + 1).padStart(2, '0')}</span>
               {s}
             </li>
           ))}
         </ul>
-        <button className="btn btn--light" onClick={() => prefillContact({ type: 'AI creative production' })}>
-          Commission a visual project <ArrowUpRight aria-hidden="true" />
+        <button className="btn btn--light" onClick={() => prefillContact({ type: 'ai' })}>
+          {t.studio.cta} <ArrowUpRight aria-hidden="true" />
         </button>
       </div>
     </motion.section>

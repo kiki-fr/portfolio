@@ -2,7 +2,8 @@ import { ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
 import { Folio } from '../components/Folio'
 import { MaskLines } from '../components/Reveal'
-import { offers } from '../data/services'
+import { offerTypes } from '../data/services'
+import { useT } from '../i18n'
 import { prefillContact } from '../lib/events'
 import './Offers.css'
 
@@ -11,21 +12,20 @@ import './Offers.css'
  * Desktop: opens on hover/focus. Mobile: a vertical stack, tap to open.
  */
 export function Offers() {
+  const t = useT()
+  const offers = t.offers.items.map((o, i) => ({ ...o, type: offerTypes[i] }))
   const [active, setActive] = useState(0)
 
   return (
     <section id="services" className="offers" aria-labelledby="offers-title">
       <div className="wrap">
-        <Folio num="09" label="Services" aside="Ways to work together" />
+        <Folio id="services" aside={t.offers.aside} />
 
         <div className="offers__head">
           <h2 id="offers-title" className="offers__title">
-            <MaskLines lines={['Ways in.', <span className="serif">Pick a door.</span>]} />
+            <MaskLines lines={[t.offers.titleA, <span className="serif">{t.offers.titleB}</span>]} />
           </h2>
-          <p className="offers__note">
-            Seven entry points, from one focused session to an ongoing creative partnership. Every project is scoped to
-            the brand. No price lists — tell me where you are and we'll find the right shape.
-          </p>
+          <p className="offers__note">{t.offers.note}</p>
         </div>
 
         <ol className="doors">
@@ -48,9 +48,9 @@ export function Offers() {
                   <p className="door__line">{o.line}</p>
                   <button
                     className="btn btn--ink"
-                    onClick={() => prefillContact({ type: o.type, note: `Interested in: ${o.name}\n\n` })}
+                    onClick={() => prefillContact({ type: o.type, note: `${t.common.interestedIn} ${o.name}\n\n` })}
                   >
-                    Enquire <ArrowUpRight aria-hidden="true" />
+                    {t.common.enquire} <ArrowUpRight aria-hidden="true" />
                   </button>
                 </div>
               </li>

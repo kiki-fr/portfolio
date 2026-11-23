@@ -1,18 +1,27 @@
-/** Every section on the page, in order — used by the header and the margin rails. */
+/**
+ * Page architecture, in order. `nav` = which top-menu item is active
+ * while this section is on screen. Names come from i18n `sections`.
+ *
+ * ENTRY (portal) → LOBBY (index) → CORE (the studio) → EVIDENCE (work)
+ * → EXPLORATION (lab) → INTELLECT (journal) → PERSON (about) → CONVERSION (contact)
+ */
 export const sections = [
-  { id: 'index', name: 'Cover', nav: 'index' },
-  { id: 'intro', name: 'Point of view', nav: 'index' },
-  { id: 'pillars', name: 'Think / Direct / Create', nav: 'index' },
-  { id: 'intelligence', name: 'Intelligence', nav: 'intelligence' },
-  { id: 'direction', name: 'Creative direction', nav: 'intelligence' },
-  { id: 'studio', name: 'AI creative studio', nav: 'intelligence' },
-  { id: 'work', name: 'Selected work', nav: 'work' },
-  { id: 'lab', name: 'Creative lab', nav: 'lab' },
-  { id: 'about', name: 'About', nav: 'about' },
-  { id: 'method', name: 'Method', nav: 'about' },
-  { id: 'services', name: 'Services', nav: 'services' },
-  { id: 'contact', name: 'Contact', nav: 'contact' },
+  { id: 'index', nav: 'index' },
+  { id: 'intro', nav: 'index' },
+  { id: 'pillars', nav: 'pillars' },
+  { id: 'intelligence', nav: 'pillars' },
+  { id: 'direction', nav: 'pillars' },
+  { id: 'studio', nav: 'pillars' },
+  { id: 'services', nav: 'pillars' },
+  { id: 'method', nav: 'pillars' },
+  { id: 'work', nav: 'work' },
+  { id: 'lab', nav: 'lab' },
+  { id: 'journal', nav: 'journal' },
+  { id: 'about', nav: 'about' },
+  { id: 'contact', nav: 'contact' },
 ] as const
 
+export type SectionId = (typeof sections)[number]['id']
 export const sectionIds = sections.map((s) => s.id)
 export const sectionToNav: Record<string, string> = Object.fromEntries(sections.map((s) => [s.id, s.nav]))
+export const sectionNumber = (id: SectionId) => String(sections.findIndex((s) => s.id === id) + 1).padStart(2, '0')

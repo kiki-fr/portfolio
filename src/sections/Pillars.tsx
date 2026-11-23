@@ -5,10 +5,9 @@ import { ArtSlot } from '../components/ArtSlot'
 import { Fragments } from '../components/Fragments'
 import { Reveal } from '../components/Reveal'
 import { pillarArt } from '../data/art'
-import { pillars } from '../data/services'
+import { pillarLinks } from '../data/services'
+import { useT } from '../i18n'
 import './Pillars.css'
-
-const [think, direct, create] = pillars
 
 function PillarList({ items }: { items: readonly string[] }) {
   return (
@@ -21,17 +20,19 @@ function PillarList({ items }: { items: readonly string[] }) {
 }
 
 export function Pillars() {
+  const t = useT()
+  const [think, direct, create] = t.pillars.items.map((p, i) => ({ ...p, href: pillarLinks[i] }))
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const drift = useTransform(scrollYProgress, [0, 1], ['10%', '-30%'])
   const tilt = useTransform(scrollYProgress, [0, 1], [-8, 8])
 
   return (
-    <section id="pillars" className="pillars" aria-label="Think, Direct, Create">
+    <section id="pillars" className="pillars" aria-label={t.sections.pillars}>
       <div className="wrap pillars__head">
-        <p className="mono">Three verbs · one practice</p>
+        <p className="mono">{t.pillars.head}</p>
         <p className="pillars__formula">
-          Brand intelligence <span>+</span> Creative direction <span>+</span> AI-assisted creation
+          {t.pillars.formula[0]} <span>+</span> {t.pillars.formula[1]} <span>+</span> {t.pillars.formula[2]}
         </p>
       </div>
 
@@ -61,7 +62,7 @@ export function Pillars() {
           <div className="pillar__collage">
             <div className="pillar__img pillar__img--a marks">
               <Fragments art={pillarArt.directA} slices={5} offsets={[0, -4, 6, -2, 3]} drift={10} treatment="scan" />
-              <span className="pillar__fig fig">Fig. 02 — Direction is a cut, not a filter</span>
+              <span className="pillar__fig fig">{t.pillars.directFig}</span>
             </div>
             <motion.div className="pillar__img pillar__img--b" style={{ y: drift, rotate: tilt }}>
               <ArtSlot art={pillarArt.directB} label={false} />
@@ -95,8 +96,8 @@ export function Pillars() {
           <div className="pillar__arch">
             <ArtSlot art={pillarArt.create} treatment="foil" label={false} />
             <span className="pillar__arch-tag tag" aria-hidden="true">
-              <b>Studio output</b>
-              AI-assisted · art-directed
+              <b>{t.pillars.archTag[0]}</b>
+              {t.pillars.archTag[1]}
             </span>
           </div>
         </div>

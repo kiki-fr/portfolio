@@ -1,16 +1,11 @@
 /**
- * Global site configuration.
- * Everything a non-developer is likely to change lives here or in the
- * other files in /src/data. Components never hard-code this content.
+ * Global, language-independent configuration.
+ * All visible text lives in /src/i18n (one file per language).
  */
 
 export const site = {
   name: 'Karen Iredy',
   wordmark: 'KAREN IREDY',
-  positioning: 'Creative Direction for Brands',
-  roles: ['Creative Director', 'Brand Strategist', 'Fashion Designer', 'AI Creative'],
-  location: 'Based in Europe · Working internationally',
-  issue: 'Vol. 01',
 
   /**
    * TODO: add the public contact email. While empty, the site hides the
@@ -26,27 +21,18 @@ export const site = {
 
   /** Contact form endpoint, read from the VITE_FORM_ENDPOINT env variable (see README). */
   formEndpoint: (import.meta.env.VITE_FORM_ENDPOINT as string | undefined) ?? '',
-
-  /** Budget ranges shown in the contact form. Edit freely; no prices are shown elsewhere. */
-  budgets: ['Under €3k', '€3k – €8k', '€8k – €20k', '€20k +', 'Not sure yet'],
-
-  projectTypes: [
-    'Brand strategy',
-    'Creative direction',
-    'AI creative production',
-    'Campaign',
-    'Product',
-    'Other',
-  ],
 } as const
 
-export type ProjectType = (typeof site.projectTypes)[number]
+/** Project types used by the contact form; labels come from i18n `contact.projectTypes`. */
+export const projectTypeKeys = ['strategy', 'direction', 'ai', 'campaign', 'product', 'other'] as const
+export type ProjectType = (typeof projectTypeKeys)[number]
 
+/** Top navigation: `id` is the anchor, `key` the label in i18n `nav`. */
 export const nav = [
-  { id: 'index', label: 'Index' },
-  { id: 'intelligence', label: 'Intelligence' },
-  { id: 'services', label: 'Services' },
-  { id: 'work', label: 'Work' },
-  { id: 'lab', label: 'Lab' },
-  { id: 'about', label: 'About' },
+  { id: 'index', key: 'index' },
+  { id: 'pillars', key: 'studio' },
+  { id: 'work', key: 'work' },
+  { id: 'lab', key: 'lab' },
+  { id: 'journal', key: 'journal' },
+  { id: 'about', key: 'about' },
 ] as const

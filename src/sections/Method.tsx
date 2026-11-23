@@ -1,11 +1,12 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { Folio } from '../components/Folio'
-import { method } from '../data/services'
+import { useT } from '../i18n'
+import type { Content } from '../i18n/en'
 import { useSheet } from '../hooks/useSheet'
 import './Method.css'
 
-function Step({ step, index, onActive }: { step: (typeof method)[number]; index: number; onActive: (i: number) => void }) {
+function Step({ step, index, onActive }: { step: Content['method']['steps'][number] & { num: string }; index: number; onActive: (i: number) => void }) {
   const ref = useRef<HTMLLIElement>(null)
   const inView = useInView(ref, { margin: '-45% 0px -45% 0px' })
   useEffect(() => {
@@ -23,6 +24,8 @@ function Step({ step, index, onActive }: { step: (typeof method)[number]; index:
 }
 
 export function Method() {
+  const t = useT()
+  const method = t.method.steps.map((m, i) => ({ ...m, num: String(i + 1).padStart(2, '0') }))
   const [active, setActive] = useState(0)
   const ref = useRef<HTMLElement>(null)
   const clipPath = useSheet(ref)
@@ -30,9 +33,9 @@ export function Method() {
   return (
     <motion.section ref={ref} style={{ clipPath }} id="method" className="method" aria-labelledby="method-title">
       <div className="wrap">
-        <Folio num="08" label="Method" aside="Five movements" />
+        <Folio id="method" aside={t.method.aside} />
         <h2 id="method-title" className="method__title">
-          How an idea <span className="serif">becomes</span> a world.
+          {t.method.titleA} <span className="serif">{t.method.titleSerif}</span> {t.method.titleB}
         </h2>
       </div>
 

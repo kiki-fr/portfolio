@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { sectionIds, sections } from '../data/sections'
 import { site } from '../data/site'
 import { useActiveSection } from '../hooks/useActiveSection'
+import { useT } from '../i18n'
 import './Rails.css'
 
 /**
@@ -9,6 +10,7 @@ import './Rails.css'
  * on the right, and a hairline foil progress bar across the top.
  */
 export function Rails() {
+  const t = useT()
   const activeId = useActiveSection(sectionIds)
   const index = Math.max(0, sections.findIndex((s) => s.id === activeId))
   const current = sections[index]
@@ -21,9 +23,9 @@ export function Rails() {
       <div className="rail rail--left" aria-hidden="true">
         <span>{site.wordmark}</span>
         <span className="rail__line" />
-        <span>{site.positioning}</span>
+        <span>{t.common.positioning}</span>
         <span className="rail__line" />
-        <span>{site.issue}</span>
+        <span>{t.common.issue}</span>
       </div>
       <div className="rail rail--right" aria-hidden="true">
         <AnimatePresence mode="wait">
@@ -34,7 +36,7 @@ export function Rails() {
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35 }}
           >
-            {String(index + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')} — {current.name}
+            {String(index + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')} — {t.sections[current.id]}
           </motion.span>
         </AnimatePresence>
       </div>

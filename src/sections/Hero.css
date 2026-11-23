@@ -90,6 +90,9 @@
   display: block;
   overflow: hidden;
   padding-bottom: 0.05em;
+  /* room for accents/umlauts on capitals (Ö, É) without changing the spacing */
+  padding-top: 0.14em;
+  margin-top: -0.14em;
 }
 .hero__line {
   display: block;

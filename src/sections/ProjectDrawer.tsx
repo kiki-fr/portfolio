@@ -2,12 +2,16 @@ import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { ArtSlot } from '../components/ArtSlot'
-import { statusLabel, type Project } from '../data/projects'
+import { useT } from '../i18n'
+import type { LocalProject } from './Work'
 import { prefillContact } from '../lib/events'
 import './ProjectDrawer.css'
 
 /** Full-screen project view. Escape or the close button dismisses it. */
-export function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => void }) {
+export function ProjectDrawer({ project, onClose }: { project: LocalProject; onClose: () => void }) {
+  const t = useT()
+  const dr = t.work.drawer
+  const cat = t.work.categories[project.category]
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -24,9 +28,9 @@ export function ProjectDrawer({ project, onClose }: { project: Project; onClose:
   }, [onClose])
 
   const blocks = [
-    { k: 'Context', v: project.context },
-    { k: 'Creative challenge', v: project.challenge },
-    { k: 'Creative solution', v: project.solution },
+    { k: dr.context, v: project.context },
+    { k: dr.challenge, v: project.challenge },
+    { k: dr.solution, v: project.solution },
   ]
 
   return (
@@ -42,16 +46,16 @@ export function ProjectDrawer({ project, onClose }: { project: Project; onClose:
     >
       <div className="drawer__bar">
         <span className="mono">
-          {project.category} — {project.year}
+          {cat} — {project.year}
         </span>
-        <button ref={closeRef} className="drawer__close" onClick={onClose} aria-label="Close project">
+        <button ref={closeRef} className="drawer__close" onClick={onClose} aria-label={dr.close}>
           <X aria-hidden="true" />
         </button>
       </div>
 
       <div className="drawer__scroll">
         <header className="drawer__head wrap">
-          <p className={`mono drawer__status drawer__status--${project.status}`}>{statusLabel[project.status]}</p>
+          <p className={`mono drawer__status drawer__status--${project.status}`}>{t.work.status[project.status]}</p>
           <h2 id="drawer-title" className="drawer__title">
             {project.title}
           </h2>
@@ -70,8 +74,8 @@ export function ProjectDrawer({ project, onClose }: { project: Project; onClose:
             </section>
           ))}
           <section className="drawer__block">
-            <h3 className="mono">Result</h3>
-            <p>{project.result ?? 'Results will be added only when they are real and verified.'}</p>
+            <h3 className="mono">{dr.result}</h3>
+            <p>{project.result ?? dr.noResult}</p>
           </section>
         </div>
 
@@ -84,15 +88,15 @@ export function ProjectDrawer({ project, onClose }: { project: Project; onClose:
         </div>
 
         <div className="wrap drawer__foot">
-          <p>Have something in a similar territory?</p>
+          <p>{dr.foot}</p>
           <button
             className="btn btn--ink"
             onClick={() => {
               onClose()
-              prefillContact({ note: `Re: ${project.title} (${project.category})\n\n` })
+              prefillContact({ note: `Re: ${project.title} (${cat})\n\n` })
             }}
           >
-            Tell me about it
+            {dr.cta}
           </button>
         </div>
       </div>

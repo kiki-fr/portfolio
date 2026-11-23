@@ -109,12 +109,20 @@ They are not real projects. Replace them, or add a new object to the `projects` 
 
 ---
 
-## 5. Edit text
+## 5. Edit text (5 languages)
 
-- **Copy of services, method, offers, Think/Direct/Create:** `src/data/services.ts`
-- **Name, location, email, socials, budgets, project types:** `src/data/site.ts`
-- **Headlines and section copy** (hero, intro, about…): directly in the matching file in `src/sections/`.
-- **SEO title / description / social preview:** `index.html`
+The site opens with a **language portal** (English, Español, Nederlands, Deutsch, Français).
+The choice is remembered in the visitor's browser, and the header's language button reopens the portal.
+To link straight to one language, add `?lang=es` (or `en`, `nl`, `de`, `fr`) to the URL.
+
+**All visible text lives in `src/i18n/`**, one file per language: `en.ts`, `es.ts`, `nl.ts`, `de.ts`, `fr.ts`.
+Every file has exactly the same structure. To change a sentence, edit it in each language file.
+TypeScript reports an error if a language is missing a key.
+
+- **Email, socials, form endpoint:** `src/data/site.ts`
+- **Images and layout data:** `src/data/` (`art.ts`, `services.ts`, `projects.ts`, `lab.ts`)
+- **Page order and section numbers:** `src/data/sections.ts`
+- **SEO title / description:** `meta` in each language file, with the defaults in `index.html`
 - **Colours, fonts, sizes:** `src/styles/tokens.css`
 
 ### Still to fill in (TODO)

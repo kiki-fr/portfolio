@@ -5,7 +5,9 @@ import { ArtSlot } from '../components/ArtSlot'
 import { Folio } from '../components/Folio'
 import { MaskLines } from '../components/Reveal'
 import { contactArt } from '../data/art'
-import { site, type ProjectType } from '../data/site'
+import { projectTypeKeys, site, type ProjectType } from '../data/site'
+import { useT } from '../i18n'
+import { sectionNumber } from '../data/sections'
 import { PREFILL_EVENT, type PrefillDetail } from '../lib/events'
 import { useSheet } from '../hooks/useSheet'
 import './Contact.css'
@@ -26,6 +28,8 @@ interface FormState {
 const empty: FormState = { name: '', email: '', company: '', type: '', budget: '', message: '', website: '' }
 
 export function Contact() {
+  const t = useT()
+  const c = t.contact
   const [form, setForm] = useState<FormState>(empty)
   const [status, setStatus] = useState<Status>('idle')
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
@@ -57,9 +61,9 @@ export function Contact() {
 
   const validate = () => {
     const e: typeof errors = {}
-    if (!form.name.trim()) e.name = 'Your name, please.'
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'A valid email so I can reply.'
-    if (form.message.trim().length < 10) e.message = 'A few words about the idea.'
+    if (!form.name.trim()) e.name = c.errors.name
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = c.errors.email
+    if (form.message.trim().length < 10) e.message = c.errors.message
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -69,12 +73,12 @@ export function Contact() {
       `Name: ${form.name}`,
       `Email: ${form.email}`,
       `Company / brand: ${form.company || '—'}`,
-      `Project type: ${form.type || '—'}`,
+      `Project type: ${form.type ? c.projectTypes[form.type] : '—'}`,
       `Budget: ${form.budget || '—'}`,
       '',
       form.message,
     ].join('\n')
-    return `mailto:${site.email}?subject=${encodeURIComponent(`New project — ${form.company || form.name}`)}&body=${encodeURIComponent(body)}`
+    return `mailto:${site.email}?subject=${encodeURIComponent(`${c.subject} — ${form.company || form.name}`)}&body=${encodeURIComponent(body)}`
   }
 
   const onSubmit = async (e: FormEvent) => {
@@ -94,7 +98,7 @@ export function Contact() {
       const res = await fetch(site.formEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...payload, _subject: `New project — ${form.company || form.name}` }),
+        body: JSON.stringify({ ...payload, _subject: `${c.subject} — ${form.company || form.name}` }),
       })
       if (!res.ok) throw new Error(String(res.status))
       setStatus('sent')
@@ -107,16 +111,17 @@ export function Contact() {
   return (
     <motion.section ref={sectionRef} style={{ clipPath }} id="contact" className="contact" aria-labelledby="contact-title">
       <div className="wrap contact__inner">
-        <Folio num="10" label="Contact" aside={site.location} />
+        <Folio id="contact" aside={t.common.location} />
 
         <h2 id="contact-title" className="contact__title">
           <MaskLines
             lines={[
               <>
-                What are <span className="serif">you</span>
+                {c.titleA} <span className="serif">{c.titleASerif}</span>
               </>,
               <>
-                imagining<span className="contact__q foil-text">?</span>
+                {c.titleB}
+                <span className="contact__q foil-text">?</span>
               </>,
             ]}
           />
@@ -128,17 +133,17 @@ export function Contact() {
               <ArtSlot art={contactArt} label={false} treatment="foil" decorative />
             </div>
             <p className="contact__lede">
-              Tell me about the idea, the challenge — or the thing you haven't figured out yet.
+              {c.lede}
             </p>
             {site.email && (
               <a className="contact__mail" href={`mailto:${site.email}`}>
                 <Mail aria-hidden="true" /> {site.email}
               </a>
             )}
-            <p className="contact__small mono">Replies within a few working days · English, by default</p>
+            <p className="contact__small mono">{c.small}</p>
           </div>
 
-          <div className="contact__card">
+          <div className="contact__card" data-card={`${c.card} Nº ${sectionNumber('contact')}`}>
             <AnimatePresence mode="wait">
               {status === 'sent' ? (
                 <motion.div
@@ -152,10 +157,10 @@ export function Contact() {
                   <span className="contact__done-icon">
                     <Check aria-hidden="true" />
                   </span>
-                  <p className="contact__done-title serif">Received.</p>
-                  <p>Thank you — your message is with me. I'll come back to you personally.</p>
+                  <p className="contact__done-title serif">{c.doneTitle}</p>
+                  <p>{c.doneText}</p>
                   <button className="btn btn--line" onClick={() => setStatus('idle')}>
-                    Send another
+                    {c.again}
                   </button>
                 </motion.div>
               ) : (
@@ -170,12 +175,12 @@ export function Contact() {
                 >
                   {!connected && (
                     <p className="contact__notice mono" role="note">
-                      Preview mode — the form isn't connected to an inbox yet.
+                      {c.notice}
                     </p>
                   )}
 
                   <div className="field-row">
-                    <Field label="Name" error={errors.name} required>
+                    <Field label={c.fields.name} error={errors.name} required>
                       <input
                         name="name"
                         autoComplete="name"
@@ -184,7 +189,7 @@ export function Contact() {
                         aria-invalid={Boolean(errors.name)}
                       />
                     </Field>
-                    <Field label="Email" error={errors.email} required>
+                    <Field label={c.fields.email} error={errors.email} required>
                       <input
                         type="email"
                         name="email"
@@ -196,7 +201,7 @@ export function Contact() {
                     </Field>
                   </div>
 
-                  <Field label="Company or brand">
+                  <Field label={c.fields.company}>
                     <input
                       name="company"
                       autoComplete="organization"
@@ -206,27 +211,27 @@ export function Contact() {
                   </Field>
 
                   <fieldset className="field field--chips">
-                    <legend>Project type</legend>
+                    <legend>{c.fields.type}</legend>
                     <div className="chips">
-                      {site.projectTypes.map((t) => (
-                        <label key={t} className={`chip ${form.type === t ? 'is-on' : ''}`}>
+                      {projectTypeKeys.map((k) => (
+                        <label key={k} className={`chip ${form.type === k ? 'is-on' : ''}`}>
                           <input
                             type="radio"
                             name="type"
-                            value={t}
-                            checked={form.type === t}
-                            onChange={() => set('type', t)}
+                            value={k}
+                            checked={form.type === k}
+                            onChange={() => set('type', k)}
                           />
-                          {t}
+                          {c.projectTypes[k]}
                         </label>
                       ))}
                     </div>
                   </fieldset>
 
-                  <Field label="Budget range">
+                  <Field label={c.fields.budget}>
                     <select name="budget" value={form.budget} onChange={(e) => set('budget', e.target.value)}>
-                      <option value="">Select a range</option>
-                      {site.budgets.map((b) => (
+                      <option value="">{c.selectRange}</option>
+                      {c.budgets.map((b) => (
                         <option key={b} value={b}>
                           {b}
                         </option>
@@ -234,14 +239,14 @@ export function Contact() {
                     </select>
                   </Field>
 
-                  <Field label="The project" error={errors.message} required>
+                  <Field label={c.fields.message} error={errors.message} required>
                     <textarea
                       ref={messageRef}
                       name="message"
                       rows={5}
                       value={form.message}
                       onChange={(e) => set('message', e.target.value)}
-                      placeholder="The idea, the context, the timing…"
+                      placeholder={c.messagePlaceholder}
                       aria-invalid={Boolean(errors.message)}
                     />
                   </Field>
@@ -255,28 +260,28 @@ export function Contact() {
                   </div>
 
                   <div className="contact__submit">
-                    <button type="submit" className="btn btn--ink" disabled={status === 'sending'} data-cursor="Send">
-                      {status === 'sending' ? 'Sending…' : 'Send the idea'} <ArrowUpRight aria-hidden="true" />
+                    <button type="submit" className="btn btn--ink" disabled={status === 'sending'} data-cursor={t.cursor.send}>
+                      {status === 'sending' ? c.sending : c.send} <ArrowUpRight aria-hidden="true" />
                     </button>
 
                     <div aria-live="polite" className="contact__feedback">
                       {status === 'error' && (
                         <p>
-                          Something went wrong on the way.{' '}
+                          {c.error}{' '}
                           {site.email ? (
-                            <a href={mailtoHref()}>Send it by email instead →</a>
+                            <a href={mailtoHref()}>{c.errorEmail}</a>
                           ) : (
-                            'Please try again in a moment.'
+                            c.tryAgain
                           )}
                         </p>
                       )}
                       {status === 'not-connected' && (
                         <p>
-                          This form isn't sending messages yet, so nothing was sent.{' '}
+                          {c.notConnected}{' '}
                           {site.email ? (
-                            <a href={mailtoHref()}>Open it in your email app →</a>
+                            <a href={mailtoHref()}>{c.openEmail}</a>
                           ) : (
-                            'A direct email address will be added here soon.'
+                            c.emailSoon
                           )}
                         </p>
                       )}

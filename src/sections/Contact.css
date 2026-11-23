@@ -89,7 +89,7 @@
   clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%);
 }
 .contact__card::before {
-  content: 'Brief — Form Nº 10';
+  content: attr(data-card);
   position: absolute;
   top: 1rem;
   right: 3.4rem;

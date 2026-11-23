@@ -4,12 +4,13 @@ import { useRef, type ReactNode } from 'react'
 import { ArtSlot } from '../components/ArtSlot'
 import { Fragments } from '../components/Fragments'
 import { heroArt } from '../data/art'
-import { site } from '../data/site'
+import { useT } from '../i18n'
 import './Hero.css'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
 export function Hero() {
+  const t = useT()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
@@ -31,18 +32,18 @@ export function Hero() {
     </span>
   )
 
-  const letters = 'IMPOSSIBLE'.split('')
+  const letters = t.hero.l3.split('')
 
   return (
     <section id="index" ref={ref} className="hero" aria-labelledby="hero-title">
       {/* Corner furniture, like a magazine cover */}
       <motion.div className="hero__corners mono" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 1 }}>
         <span className="hero__c hero__c--tl">
-          Nº 001 <i>/</i> {site.issue}
+          Nº 001 <i>/</i> {t.common.issue}
         </span>
-        <span className="hero__c hero__c--tr">{site.roles.join(' · ')}</span>
+        <span className="hero__c hero__c--tr">{t.common.roles.join(' · ')}</span>
         <span className="hero__c hero__c--br">
-          Index ↓ <i>01—12</i>
+          {t.hero.index} <i>01—13</i>
         </span>
       </motion.div>
 
@@ -55,7 +56,7 @@ export function Hero() {
         transition={{ duration: 1.6, ease: [0.65, 0, 0.35, 1], delay: 0.1 }}
       >
         <Fragments art={heroArt.chrome} slices={6} offsets={[0, 5, -4, 8, -7, 2]} treatment="foil" priority />
-        <span className="hero__fig fig">Fig. 01 — {heroArt.chrome.alt}</span>
+        <span className="hero__fig fig">{t.hero.fig}</span>
       </motion.div>
 
       <motion.span
@@ -66,9 +67,9 @@ export function Hero() {
         aria-hidden="true"
       >
         <b>Karen Iredy</b>
-        Creative direction
+        {t.hero.tag[0]}
         <br />
-        for brands — Nº 001
+        {t.hero.tag[1]}
       </motion.span>
 
       <motion.div className="hero__lens marks" style={{ y: lensY }} aria-hidden="true">
@@ -76,21 +77,21 @@ export function Hero() {
       </motion.div>
 
       <motion.h1 id="hero-title" className="hero__title" style={{ y: titleY }}>
-        <span className="sr-only">I make ideas impossible to ignore.</span>
+        <span className="sr-only">{t.hero.srTitle}</span>
         <span aria-hidden="true">
           {line(
             <>
-              I make <span className="hero__l1-rule" />
+              {t.hero.l1} <span className="hero__l1-rule" />
             </>,
             'hero__l1',
             0,
           )}
-          {line(<span className="serif">ideas</span>, 'hero__l2', 1)}
+          {line(<span className="serif">{t.hero.l2}</span>, 'hero__l2', 1)}
           <motion.span className="hero__l3-wrap" style={{ x: bigX }}>
             {line(
-              <span className="glitch" data-text="IMPOSSIBLE">
+              <span className="glitch" data-text={t.hero.l3}>
                 {letters.map((l, i) => (
-                  <span key={i} className={i >= 6 ? 'hero__hollow' : undefined}>
+                  <span key={i} className={i >= letters.length - 4 ? 'hero__hollow' : undefined}>
                     {l}
                   </span>
                 ))}
@@ -101,7 +102,7 @@ export function Hero() {
           </motion.span>
           {line(
             <>
-              <span className="serif">to</span> ignore.
+              <span className="serif">{t.hero.l4serif}</span> {t.hero.l4}
             </>,
             'hero__l4',
             3,
@@ -116,16 +117,16 @@ export function Hero() {
         transition={{ duration: 1, delay: 1.4 }}
       >
         <p className="hero__statement">
-          <span className="mono">( Strategic thinking</span>
-          <span className="serif">Unexpected creative direction</span>
-          <span className="mono">Brands that leave a mark )</span>
+          <span className="mono">{t.hero.statement[0]}</span>
+          <span className="serif">{t.hero.statement[1]}</span>
+          <span className="mono">{t.hero.statement[2]}</span>
         </p>
         <div className="hero__ctas">
-          <a href="#contact" className="btn btn--ink" data-cursor="Let's talk">
-            Start a project <ArrowUpRight aria-hidden="true" />
+          <a href="#contact" className="btn btn--ink" data-cursor={t.cursor.talk}>
+            {t.hero.cta} <ArrowUpRight aria-hidden="true" />
           </a>
           <a href="#intelligence" className="hero__link">
-            See how I think
+            {t.hero.link}
           </a>
         </div>
       </motion.div>

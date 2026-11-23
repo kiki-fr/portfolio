@@ -4,16 +4,37 @@ import { useEffect, useMemo, useState, type PointerEvent } from 'react'
 import { ArtSlot } from '../components/ArtSlot'
 import { Folio } from '../components/Folio'
 import { MaskLines } from '../components/Reveal'
-import { categories, projects, statusLabel, type Category, type Project } from '../data/projects'
+import { categoryKeys, projects as rawProjects, type Category } from '../data/projects'
+import { useT } from '../i18n'
+import type { Content } from '../i18n/en'
 import { useFinePointer } from '../hooks/useMediaQuery'
 import { ProjectDrawer } from './ProjectDrawer'
 import './Work.css'
 
-type Filter = Category | 'All'
+type Filter = Category | 'all'
+
+/** A project with its text in the current language. */
+export function localize(t: Content) {
+  return rawProjects.map((p) => {
+    const txt = t.work.projects[p.slug] ?? { title: p.slug, description: '' }
+    return {
+      ...p,
+      title: txt.title,
+      description: txt.description,
+      context: txt.context ?? t.work.guide.context,
+      challenge: txt.challenge ?? t.work.guide.challenge,
+      solution: txt.solution ?? t.work.guide.solution,
+      result: txt.result,
+    }
+  })
+}
+export type LocalProject = ReturnType<typeof localize>[number]
 
 export function Work() {
-  const [filter, setFilter] = useState<Filter>('All')
-  const [hovered, setHovered] = useState<Project | null>(null)
+  const t = useT()
+  const projects = useMemo(() => localize(t), [t])
+  const [filter, setFilter] = useState<Filter>('all')
+  const [hovered, setHovered] = useState<LocalProject | null>(null)
   const [openSlug, setOpenSlug] = useState<string | null>(null)
   const fine = useFinePointer()
 
@@ -22,14 +43,14 @@ export function Work() {
   const px = useSpring(x, { stiffness: 220, damping: 26 })
   const py = useSpring(y, { stiffness: 220, damping: 26 })
 
-  const list = useMemo(() => (filter === 'All' ? projects : projects.filter((p) => p.category === filter)), [filter])
+  const list = useMemo(() => (filter === 'all' ? projects : projects.filter((p) => p.category === filter)), [filter, projects])
   const open = projects.find((p) => p.slug === openSlug) ?? null
 
   // Deep links: #work/<slug> opens a project directly.
   useEffect(() => {
     const fromHash = () => {
       const m = window.location.hash.match(/^#work\/(.+)$/)
-      if (m && projects.some((p) => p.slug === m[1])) setOpenSlug(m[1])
+      if (m && rawProjects.some((p) => p.slug === m[1])) setOpenSlug(m[1])
     }
     fromHash()
     window.addEventListener('hashchange', fromHash)
@@ -53,23 +74,20 @@ export function Work() {
   return (
     <section id="work" className="work" aria-labelledby="work-title">
       <div className="wrap">
-        <Folio num="05" label="Selected work" aside={`${projects.length} entries`} />
+        <Folio id="work" aside={`${projects.length} ${t.work.entries}`} />
 
         <div className="work__head">
           <h2 id="work-title" className="work__title">
-            <MaskLines lines={['Selected', <span className="serif">work</span>]} />
+            <MaskLines lines={[t.work.titleA, <span className="serif">{t.work.titleB}</span>]} />
           </h2>
-          <p className="work__note">
-            Case studies read like editorials, not catalogues. Real client projects and self-initiated concepts are
-            always labelled as such.
-          </p>
+          <p className="work__note">{t.work.note}</p>
         </div>
 
-        <div className="work__filters" role="group" aria-label="Filter projects by category">
-          {(['All', ...categories] as Filter[]).map((c) => (
+        <div className="work__filters" role="group" aria-label={t.work.filterLabel}>
+          {(['all', ...categoryKeys] as Filter[]).map((c) => (
             <button key={c} className={`work__chip ${filter === c ? 'is-active' : ''}`} aria-pressed={filter === c} onClick={() => setFilter(c)}>
-              {c}
-              {c !== 'All' && <sup>{projects.filter((p) => p.category === c).length}</sup>}
+              {c === 'all' ? t.work.all : t.work.categories[c]}
+              {c !== 'all' && <sup>{projects.filter((p) => p.category === c).length}</sup>}
             </button>
           ))}
         </div>
@@ -91,15 +109,15 @@ export function Work() {
                   onClick={() => openProject(p.slug)}
                   onPointerEnter={() => setHovered(p)}
                   onFocus={() => setHovered(p)}
-                  data-cursor="Open"
+                  data-cursor={t.cursor.open}
                 >
                   <span className="work__idx mono">{String(i + 1).padStart(2, '0')}</span>
                   <span className="work__thumb">
                     <ArtSlot art={p.hero} label={false} />
                   </span>
                   <span className="work__name">{p.title}</span>
-                  <span className="work__cat mono">{p.category}</span>
-                  <span className={`work__status mono work__status--${p.status}`}>{statusLabel[p.status]}</span>
+                  <span className="work__cat mono">{t.work.categories[p.category]}</span>
+                  <span className={`work__status mono work__status--${p.status}`}>{t.work.status[p.status]}</span>
                   <span className="work__year mono">{p.year}</span>
                   <ArrowUpRight className="work__arrow" aria-hidden="true" />
                 </button>

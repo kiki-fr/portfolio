@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { sectionIds, sectionToNav } from '../data/sections'
 import { nav, site } from '../data/site'
 import { useActiveSection } from '../hooks/useActiveSection'
-import { sectionIds, sectionToNav } from '../data/sections'
+import { useLang } from '../i18n'
 import './Header.css'
 
 /**
@@ -10,6 +11,7 @@ import './Header.css'
  * `mix-blend-mode: difference`, so it reads on ivory, black and imagery alike.
  */
 export function Header() {
+  const { t, lang, openPortal } = useLang()
   const [open, setOpen] = useState(false)
   const active = sectionToNav[useActiveSection(sectionIds)]
 
@@ -20,10 +22,12 @@ export function Header() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
+  const items = [...nav.map((n) => ({ id: n.id, label: t.nav[n.key] })), { id: 'contact', label: t.nav.contact }]
+
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t.nav.skip}
       </a>
 
       <AnimatePresence>
@@ -38,7 +42,7 @@ export function Header() {
             transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
           >
             <ul>
-              {[...nav, { id: 'contact', label: 'Contact' }].map((item, i) => (
+              {items.map((item, i) => (
                 <motion.li
                   key={item.id}
                   initial={{ opacity: 0, x: -30 }}
@@ -54,18 +58,24 @@ export function Header() {
               ))}
             </ul>
             <div className="menu__foot">
-              <span className="tag">
-                <b>{site.wordmark}</b>
-                {site.positioning}
-              </span>
-              <p className="mono">{site.location}</p>
+              <button
+                className="tag"
+                onClick={() => {
+                  setOpen(false)
+                  openPortal()
+                }}
+              >
+                <b>{t.nav.language}</b>
+                {lang.toUpperCase()} — EN / ES / NL / DE / FR
+              </button>
+              <p className="mono">{t.common.location}</p>
             </div>
           </motion.nav>
         )}
       </AnimatePresence>
 
       <header className={`header ${open ? 'is-open' : ''}`}>
-        <a href="#index" className="header__mark" aria-label={`${site.name} — back to top`} onClick={() => setOpen(false)}>
+        <a href="#index" className="header__mark" aria-label={`${site.name} — ${t.nav.backToTop}`} onClick={() => setOpen(false)}>
           <span className="header__mark-name">Karen</span>
           <span className="header__mark-name serif">Iredy</span>
         </a>
@@ -80,26 +90,31 @@ export function Header() {
                   aria-current={active === item.id ? 'true' : undefined}
                 >
                   <sup>{String(i).padStart(2, '0')}</sup>
-                  {item.label}
+                  {t.nav[item.key]}
                 </a>
               </li>
             ))}
           </ul>
         </nav>
 
-        <a href="#contact" className={`header__contact ${active === 'contact' ? 'is-active' : ''}`}>
-          Contact <span aria-hidden="true">↗</span>
-        </a>
-
-        <button
-          className="header__burger mono"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? 'Close' : 'Menu'}
-          <span aria-hidden="true" className="header__burger-icon" />
-        </button>
+        <div className="header__end">
+          <button className="header__lang" onClick={openPortal} aria-label={`${t.nav.language}: ${lang.toUpperCase()}`}>
+            {lang.toUpperCase()}
+            <span aria-hidden="true"> ◇</span>
+          </button>
+          <a href="#contact" className={`header__contact ${active === 'contact' ? 'is-active' : ''}`}>
+            {t.nav.contact} <span aria-hidden="true">↗</span>
+          </a>
+          <button
+            className="header__burger mono"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((o) => !o)}
+          >
+            {open ? t.nav.close : t.nav.menu}
+            <span aria-hidden="true" className="header__burger-icon" />
+          </button>
+        </div>
       </header>
     </>
   )

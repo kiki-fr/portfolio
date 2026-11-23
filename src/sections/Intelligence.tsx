@@ -3,31 +3,34 @@ import { ArrowUpRight, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Folio } from '../components/Folio'
 import { MaskLines, Reveal } from '../components/Reveal'
-import { intelligence } from '../data/services'
+import { useT } from '../i18n'
 import { prefillContact } from '../lib/events'
 import './Intelligence.css'
 
 export function Intelligence() {
+  const t = useT()
   const [open, setOpen] = useState<string | null>('01')
+  const intelligence = t.intelligence.services.map((s, i) => ({ ...s, num: String(i + 1).padStart(2, '0') }))
 
   return (
     <section id="intelligence" className="intel" aria-labelledby="intel-title">
       <div className="wrap">
-        <Folio num="02" label="Intelligence" aside="Brand strategy" />
+        <Folio id="intelligence" aside={t.intelligence.aside} />
 
         <div className="intel__head">
           <h2 id="intel-title" className="intel__title">
-            <MaskLines lines={['Before the image,', <>there is <em className="serif">the idea.</em></>]} />
+            <MaskLines
+              lines={[
+                t.intelligence.titleA,
+                <>
+                  {t.intelligence.titleB} <em className="serif">{t.intelligence.titleBSerif}</em>
+                </>,
+              ]}
+            />
           </h2>
           <Reveal className="intel__lede" delay={0.2}>
-            <p>
-              Every strong image starts long before the camera, the prompt or the moodboard. It starts with
-              understanding: what the business is, what it wants to become, and the space it could own that
-              nobody else is standing in.
-            </p>
-            <p className="intel__lede-small">
-              This is the quiet, rigorous part of the work — and the part that makes everything after it sharper.
-            </p>
+            <p>{t.intelligence.lede}</p>
+            <p className="intel__lede-small">{t.intelligence.ledeSmall}</p>
           </Reveal>
         </div>
 
@@ -62,15 +65,15 @@ export function Intelligence() {
                     >
                       <div className="intel__cols">
                         <div>
-                          <p className="mono intel__k">What it is</p>
+                          <p className="mono intel__k">{t.intelligence.labels.what}</p>
                           <p className="intel__what">{s.what}</p>
                         </div>
                         <div>
-                          <p className="mono intel__k">The problem it solves</p>
+                          <p className="mono intel__k">{t.intelligence.labels.problem}</p>
                           <p>{s.problem}</p>
                         </div>
                         <div>
-                          <p className="mono intel__k">You receive</p>
+                          <p className="mono intel__k">{t.intelligence.labels.receive}</p>
                           <ul className="intel__receive">
                             {s.receive.map((r) => (
                               <li key={r}>{r}</li>
@@ -88,14 +91,14 @@ export function Intelligence() {
 
         <Reveal className="intel__cta">
           <p className="intel__cta-line">
-            Let's find your brand's <em className="serif">next chapter.</em>
+            {t.intelligence.ctaLine} <em className="serif">{t.intelligence.ctaLineSerif}</em>
           </p>
           <button
             className="btn btn--ink"
-            data-cursor="Begin"
-            onClick={() => prefillContact({ type: 'Brand strategy' })}
+            data-cursor={t.cursor.begin}
+            onClick={() => prefillContact({ type: 'strategy' })}
           >
-            Start with strategy <ArrowUpRight aria-hidden="true" />
+            {t.intelligence.cta} <ArrowUpRight aria-hidden="true" />
           </button>
         </Reveal>
       </div>

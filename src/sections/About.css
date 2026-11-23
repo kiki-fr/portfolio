@@ -130,3 +130,101 @@
     grid-column: 1;
   }
 }
+
+/* ── Closer: the person behind the practice ── */
+.about__closer {
+  display: grid;
+  grid-template-columns: 4fr 1fr 7fr;
+  grid-template-areas:
+    'head . beliefs'
+    'working working working';
+  gap: var(--s-6) var(--gutter);
+  margin-top: var(--section-y);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--ink);
+}
+.about__closer-head {
+  grid-area: head;
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+}
+.about__closer-title {
+  font-size: clamp(4rem, 9vw, 9.5rem);
+  font-style: italic;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+.about__closer-intro {
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.about__beliefs {
+  grid-area: beliefs;
+}
+.about__beliefs > .mono,
+.about__working > .mono {
+  opacity: 0.6;
+  margin-bottom: var(--s-3);
+}
+.about__beliefs li {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 0.5rem;
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+.about__beliefs li .mono {
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+}
+.about__beliefs li .serif {
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+.about__working {
+  grid-area: working;
+  display: grid;
+  gap: var(--s-4);
+  justify-items: start;
+}
+.about__working dl {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gutter);
+  width: 100%;
+}
+.about__working dl > div {
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line-strong);
+}
+.about__working dt {
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-style: italic;
+  line-height: 1.05;
+  margin-bottom: 0.6rem;
+}
+.about__working dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .about__closer {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'head' 'beliefs' 'working';
+  }
+  .about__working dl {
+    grid-template-columns: 1fr;
+  }
+  .about__beliefs li {
+    padding-left: 0 !important;
+  }
+}

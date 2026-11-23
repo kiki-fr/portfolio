@@ -2,19 +2,8 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
 import { useRef } from 'react'
 import { Folio } from '../components/Folio'
 import { Marquee } from '../components/Marquee'
+import { useT } from '../i18n'
 import './Intro.css'
-
-const statement =
-  'I work at the intersection of strategy, creative direction and visual experimentation — to transform ideas into distinctive brand worlds.'
-
-/** Words that carry an editorial footnote marker. */
-const notesFor: Record<string, number> = { 'strategy,': 1, direction: 2, experimentation: 3 }
-
-const footnotes = [
-  { k: 'Strategy', v: 'Ten years of brands and products, taken from first idea to market.' },
-  { k: 'Direction', v: 'Fashion, accessories, handbags, jewellery and premium consumer goods.' },
-  { k: 'Experimentation', v: 'Aesthetics without a reason don’t last. Experiments without taste don’t either.' },
-]
 
 /** Each word brightens as the paragraph scrolls through the viewport. */
 function Word({ children, progress, range, note }: { children: string; progress: MotionValue<number>; range: [number, number]; note?: number }) {
@@ -30,26 +19,28 @@ function Word({ children, progress, range, note }: { children: string; progress:
 }
 
 export function Intro() {
+  const t = useT()
   const ref = useRef<HTMLParagraphElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'end 0.5'] })
-  const words = statement.split(' ')
+
+  // Flatten the segments into words; the footnote marker goes on a segment's last word.
+  const words = t.intro.statement.flatMap((seg) => {
+    const parts = seg.text.split(' ')
+    return parts.map((w, i) => ({ w, note: i === parts.length - 1 && 'note' in seg ? seg.note : undefined }))
+  })
 
   return (
     <section id="intro" className="intro" aria-labelledby="intro-title">
-      <Marquee
-        variant="display"
-        className="intro__marquee"
-        items={['Creative direction for brands', 'Brand intelligence', 'Visual experimentation', 'AI as an instrument, not the idea']}
-      />
+      <Marquee variant="display" className="intro__marquee" items={t.intro.marquee} />
 
       <div className="wrap intro__grid">
         <aside className="intro__side">
-          <Folio num="01" label="Point of view" />
+          <Folio id="intro" />
           <h2 id="intro-title" className="intro__title serif">
-            Some brands need more than a logo. <em>They need a point of view.</em>
+            {t.intro.titleA} <em>{t.intro.titleB}</em>
           </h2>
           <ol className="intro__notes">
-            {footnotes.map((n, i) => (
+            {t.intro.footnotes.map((n, i) => (
               <li key={n.k}>
                 <span className="intro__note-num">{i + 1}</span>
                 <span>
@@ -62,8 +53,8 @@ export function Intro() {
 
         <p ref={ref} className="intro__statement">
           {words.map((w, i) => (
-            <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]} note={notesFor[w]}>
-              {w}
+            <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]} note={w.note}>
+              {w.w}
             </Word>
           ))}
         </p>

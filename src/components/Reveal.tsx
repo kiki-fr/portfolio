@@ -45,7 +45,8 @@ export function MaskLines({
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
     >
       {lines.map((line, i) => (
-        <span key={i} style={{ display: 'block', overflow: 'hidden', paddingBottom: '0.06em' }}>
+        // top padding keeps accents and umlauts on capitals (Ö, É, À) inside the mask
+        <span key={i} style={{ display: 'block', overflow: 'hidden', paddingTop: '0.12em', marginTop: '-0.12em', paddingBottom: '0.06em' }}>
           <motion.span
             className={lineClassName}
             style={{ display: 'block' }}
